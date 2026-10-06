@@ -45,8 +45,9 @@ def run() -> int:
 
     key = secrets.get("STATE_KEY")
     if not key:
-        print("Missing STATE_KEY secret. Run tools/make_state_key.py and add it to GitHub secrets.")
-        return 1
+        # Not set up yet: exit quietly so GitHub doesn't email a failure every 15 minutes.
+        print("::warning::Not set up yet: add the STATE_KEY secret (see README step 2).")
+        return 0
     state = state_mod.load(key)
     problems = 0
 
