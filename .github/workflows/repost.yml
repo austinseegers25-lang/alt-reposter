@@ -1,0 +1,48 @@
+name: Repost Instagram to TikTok + Shorts
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"   # every 15 min (GitHub may run it a few minutes late)
+  workflow_dispatch:          # "Run workflow" button for testing
+    inputs:
+      dry_run:
+        description: "Dry run (don't upload anything)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write             # lets the bot save state.enc back to the repo
+
+concurrency:
+  group: repost
+  cancel-in-progress: false   # never run two at once (avoids double posts)
+
+jobs:
+  repost:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Repost new videos
+        env:
+          SECRETS_JSON: ${{ toJSON(secrets) }}
+          DRY_RUN: ${{ inputs.dry_run && '1' || '0' }}
+        run: python -m reposter.main
+
+      - name: Save state
+        if: always()
+        run: |
+          git add state.enc 2>/dev/null || exit 0
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name "alt-reposter"
+          git config user.email "alt-reposter@users.noreply.github.com"
+          git commit -m "Update repost state [skip ci]"
+          git push

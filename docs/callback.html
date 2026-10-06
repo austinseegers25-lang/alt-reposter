@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ALT Marketing – Connect</title>
+<style>
+  body { font: 16px/1.5 system-ui, sans-serif; max-width: 560px; margin: 48px auto; padding: 0 16px; color: #1a1a1a; background: #fff; }
+  code { display: block; word-break: break-all; background: #f3f3f3; padding: 12px; border-radius: 8px; margin: 12px 0; }
+  button { font: inherit; padding: 8px 16px; border-radius: 8px; border: 1px solid #ccc; background: #fff; cursor: pointer; }
+</style>
+</head>
+<body>
+  <h1>Almost done</h1>
+  <p id="msg">Copy this code and paste it into the terminal:</p>
+  <code id="code">(no code found)</code>
+  <button id="copy">Copy code</button>
+<script>
+  const p = new URLSearchParams(location.search);
+  const code = p.get("code");
+  const el = document.getElementById("code");
+  if (code) { el.textContent = code; }
+  else if (p.get("error")) {
+    document.getElementById("msg").textContent = "Login was cancelled or failed:";
+    el.textContent = p.get("error") + " " + (p.get("error_description") || "");
+  }
+  document.getElementById("copy").onclick = () => navigator.clipboard.writeText(el.textContent);
+</script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+# Who gets reposted, and where.
+# Each person's secrets in GitHub are named after them, in capitals:
+#   IG_TOKEN_LUCAS, YT_REFRESH_TOKEN_LUCAS, TIKTOK_REFRESH_TOKEN_LUCAS
+# Adding someone later = add a block here + their 3 secrets.
+
+people:
+  - name: lucas
+    youtube: true
+    tiktok: true
+    # Turn on if the video is paid promotion for a client (e.g. Astral).
+    # Only used in tiktok_mode: direct. In draft mode, set it in the app when posting.
+    tiktok_branded_content: false
+
+  - name: tate
+    youtube: true
+    tiktok: true
+    tiktok_branded_content: false
+
+settings:
+  # draft  = video shows up in the TikTok app inbox, tap to post (works right away)
+  # direct = posts automatically (needs TikTok to approve the app first)
+  tiktok_mode: draft
+  tiktok_privacy: PUBLIC_TO_EVERYONE
+
+  # public / unlisted / private. Note: until YouTube approves your API project,
+  # YouTube forces uploads to private no matter what this says.
+  youtube_privacy: public
+  youtube_add_shorts_tag: true
+
+  # Safety cap so a burst of posts doesn't blow through API limits.
+  max_videos_per_run: 3
